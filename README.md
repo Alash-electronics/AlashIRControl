@@ -47,7 +47,6 @@ void loop() {
 ИК-таратқышты пайдалану үшін:
 
 ```cpp
-Копировать код
 #include <AlashIRControlTX.h>
 
 AlashIRControlTX irTransmitter(2); // 2 - ИК-таратқыштың пині
