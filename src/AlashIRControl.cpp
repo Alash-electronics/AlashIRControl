@@ -37,7 +37,7 @@ bool		AlashIRControlRX::check(bool i){
 			do{	if(IRRX_func_DECODE(0)){data=IRRX_uint_DATA; length=IRRX_uint_LENGTH;}else{return false;}													//	информационный пакет
 				if(IRRX_func_DECODE(1)){IRRX_uint_DATA_REPEAT=IRRX_uint_DATA; IRRX_uint_LENGTH_REPEAT=IRRX_uint_LENGTH;}									//	повторный пакет
 //				если протокол не указан пользователем и был определён как NRC, но не прошел проверку, то меняем протокол на IR_BIPHASIC и повторяем раскодирование
-				IRRX_var_J=0; if(IRRX_uint_CODING==IR_NRC){if(!IRRX_flag_SET_PROTOCOL){if(!IRRX_func_CHECK_NRC()){IRRX_var_J=1; IRRX_uint_CODING==IR_BIPHASIC;}}}
+				IRRX_var_J=0; if(IRRX_uint_CODING==IR_NRC){if(!IRRX_flag_SET_PROTOCOL){if(!IRRX_func_CHECK_NRC()){IRRX_var_J=1; IRRX_uint_CODING=IR_BIPHASIC;}}}
 			}	while(IRRX_var_J);
 //			определяем тип повторного пакета, если протокол передачи данных не указан пользователем
 			if(!IRRX_flag_SET_PROTOCOL){
@@ -57,6 +57,8 @@ bool		AlashIRControlRX::check(bool i){
 
 //			отправка пакета данных на светодиод
 void		AlashIRControlTX::send(uint32_t i, bool j){
+			if(length < 1 || length > 32) return;																										//	валидация: длина данных должна быть от 1 до 32 бит
+			if(frequency > 0 && (frequency < 20 || frequency > 60)) return;																				//	валидация: частота должна быть в разумных пределах (20-60 кГц) или 0 для отключения несущей
 			IRTX_var_I=IRTX_uint_PACK_PAUSE<(IR_INTERVAL_PACK+2+(128000000/F_CPU))?(IR_INTERVAL_PACK+2+(128000000/F_CPU)):IRTX_uint_PACK_PAUSE;				//	определяем длительность задержки между пакетами
 			uint32_t k=(IRTX_var_I-2-(128000000/F_CPU))*20;																									//	-2мс на задержки в функции IRXX_func_TIMER2_SETREG, -8мс для F_CPU=16МГц на установку регистров таймера в функции IRXX_func_TIMER2_SETREG, *20 преобразуем мс в мкс/50
 			if(IRVV.IRTX_uint_CALL_PAUSE>10){j=false;}																										//	если пауза между вызовами данной функции больше 500мкс, то считаем что удержания не было
@@ -75,6 +77,7 @@ void		AlashIRControlTX::send(uint32_t i, bool j){
 
 //			загрузка протокола передачи данных
 bool		AlashIRControlRX::protocol(const char *i){
+			if(i == NULL) return false;																														//	валидация: проверка на NULL указатель
 			for(IRRX_var_I=0; IRRX_var_I<25; IRRX_var_I++){if((i[IRRX_var_I] & 0xC0) != 0x40){return false;}}												//  возвращаем false если первые два бита любого символа в протоколе не равны "01"
 			if(IRXX.IRXX_func_DECODING(i,0)>10){return false;}																								//  возвращаем false если тип кодировки больше 10
 			IRRX_flag_SET_PROTOCOL		=	1;
@@ -107,6 +110,7 @@ bool		AlashIRControlRX::protocol(const char *i){
 
 //			загрузка протокола передачи данных
 bool		AlashIRControlTX::protocol(const char *i){
+			if(i == NULL) return false;																														//	валидация: проверка на NULL указатель
 			for(IRTX_var_I=0; IRTX_var_I<25; IRTX_var_I++){if((i[IRTX_var_I] & 0xC0) != 0x40){return false;}}												//  возвращаем false если первые два бита любого символа в протоколе не равны "01"
 			if(IRXX.IRXX_func_DECODING(i,0)>10){return false;}																								//  возвращаем false если тип кодировки больше 10
 			IRTX_uint_CODING			=	IRXX.IRXX_func_DECODING(i,0);																					//	тип кодировки
@@ -453,7 +457,7 @@ uint8_t		AlashIRControl_XX::IRXX_func_DECODING(const char *i, uint8_t j){
 						}
 					}else{																																	//	если импульс сменился на паузу, или наоборот
 						IRVV.IRRX_flag_READ_PULSE=IRVV.IRRX_pins_READ_DATA;																					//	указываем что состояние сигнала в данный момент времени равно состоянию IRRX_pins_READ_DATA
-						if (!IRVV.IRRX_uint_PACK_INDEX<68){																									//	если пакет не превышает длину массива
+						if (IRVV.IRRX_uint_PACK_INDEX < 68){																									//	если пакет не превышает длину массива
 							IRVV.IRRX_mass_PACK[IRVV.IRRX_uint_PACK_NUM][IRVV.IRRX_uint_PACK_INDEX]=IRVV.IRRX_uint_PACK_LENGTH;								//	записываем длину импульса или паузы в массив
 							IRVV.IRRX_uint_PACK_LENGTH=0;																									//	обнуляем длительность импульса или паузы
 							IRVV.IRRX_uint_PACK_INDEX++;																									//	увеличиваем индекс очередного элемента в массиве

@@ -1,0 +1,56 @@
+# Arduino build artifacts
+*.o
+*.a
+*.hex
+*.elf
+*.eep
+*.lss
+*.map
+*.sym
+
+# Arduino IDE
+.build/
+build/
+*.autosave
+
+# Platform IO
+.pio/
+.vscode/
+.pioenvs/
+.piolibdeps/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# Editor temporary files
+*.swp
+*.swo
+*.swn
+*~
+.idea/
+*.bak
+*.tmp
+
+# Python (if used for tools)
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Logs
+*.log

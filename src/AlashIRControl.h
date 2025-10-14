@@ -1,13 +1,16 @@
-//	Библиотека для работы с ИК-приёмником:   http://iarduino.ru/shop/Sensory-Datchiki/ik-priemnik-trema-modul.html
-//  И (или)    для работы с ИК-передатчиком: http://iarduino.ru/shop/Expansion-payments/ik-peredatchik-trema-modul.html
-//  Версия: 1.0.3
-//  Последнюю версию библиотеки Вы можете скачать по ссылке: http://iarduino.ru/file/257.html
-//  Подробное описание функции бибилиотеки доступно по ссылке: http://wiki.iarduino.ru/page/ik-priemnik/
-//  Библиотека является собственностью интернет магазина iarduino.ru и может свободно использоваться и распространяться!
-//  При публикации устройств или скетчей с использованием данной библиотеки, как целиком, так и её частей,
-//  в том числе и в некоммерческих целях, просим Вас опубликовать ссылку: http://iarduino.ru
-//  Автор библиотеки: Панькин Павел
-//  Если у Вас возникли технические вопросы, напишите нам: shop@iarduino.ru
+//	AlashIRControl Library
+//	Version: 1.0.7
+//
+//	For IR receivers:   https://alash-electronics.kz/
+//	For IR transmitters: https://alash-electronics.kz/
+//
+//	Developed by Айтен Бексултан from Alash-electronics.kz
+//	for educational purposes.
+//
+//	Licensed under the MIT License
+//	Copyright (c) 2024 Alash Electronics
+//
+//	For support and documentation: https://github.com/Alash-electronics/AlashIRControl
 
 #ifndef AlashIRControl_h
 #define AlashIRControl_h
