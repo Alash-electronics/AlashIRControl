@@ -1,4 +1,4 @@
-name: Compile Examples
+name: CI
 
 on:
   push:
@@ -10,8 +10,25 @@ on:
   workflow_dispatch:
 
 jobs:
-  compile:
+  lint:
+    name: Arduino Library Lint
     runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Arduino Lint
+        uses: arduino/arduino-lint-action@v1
+        with:
+          library-manager: update
+          compliance: strict
+          verbose: true
+
+  compile:
+    name: Compile Examples
+    runs-on: ubuntu-latest
+    needs: lint  # Запускается только если lint прошел успешно
 
     strategy:
       fail-fast: false
