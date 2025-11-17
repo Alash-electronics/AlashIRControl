@@ -1,5 +1,5 @@
 //	AlashIRControl Library
-//	Version: 1.0.7
+//	Version: 1.0.8
 //
 //	For IR receivers:   https://alash-electronics.kz/
 //	For IR transmitters: https://alash-electronics.kz/
@@ -22,7 +22,7 @@
 #endif
 
 #if defined(ESP32)																//
-	static hw_timer_t *Esp32Timer = timerBegin(2, 3, true);						//	Определяем структуру настройки 2 таймера, предделитель = 3 (потом его изменим), флаг = true - счёт вперёд.
+	static hw_timer_t *Esp32Timer = NULL;										//	Указатель на таймер ESP32 (инициализируется в Timer_Begin)
 	extern void timer_callback_ESP32(void);										//	Подключаем функцию обработки прерываний 2 таймера для плат ESP32.
 #elif defined(ESP8266)															//
 	extern void timer_callback_ESP8266(void);									//	Подключаем функцию обработки прерываний 1 таймера для плат ESP8266.
